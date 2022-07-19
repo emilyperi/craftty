@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Craftty.Data;
 using Craftty.WebSite.Services;
+using System.Text.Json;
+using Craftty.WebSite.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
+
+builder.Services.AddControllers();
+
+builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
 
@@ -40,6 +46,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers();
+app.MapBlazorHub();
+//app.MapGet("/products", (context) =>
+//    {
+//        var products = app.Services.GetService<JsonFileProductService>().GetProducts();
+//        var json = JsonSerializer.Serialize<IEnumerable<Product>>(products);
+//        return context.Response.WriteAsync(json);
+//    });
 
 app.Run();
 
